@@ -12,7 +12,7 @@ const userSchema = mongoose.Schema({
   birthDay: {type: Date, required: true},
   interests: {type: [String], required: true,  enum: interests},
   lookingFor: {type: String, required: true, enum: lookingFor},
-  interestedInSeeing : {type: String, required: true, enum: interestedInSeeing}
+  interestedInSeeing : {type: String, required: true, enum: interestedInSeeing}
 
 });
 

@@ -89,7 +89,7 @@ export const verify = async (req, res) => {
       const jwt_secret = process.env.JWT_SECRET || "test";
       const token = jwt.sign(
         { email, verificationNumber },
-        jwt_secret, {expiresIn:  5 * 60 }
+        jwt_secret, {expiresIn:  10 * 60 }
       );
       res.status(200).json({ message: "Verification is successful", token });
     }
@@ -142,10 +142,12 @@ export const completeSignUp = async (req, res) => {
     lookingFor,
     interestedInSeeing,
   } = req.body;  
+
   try {
 
-    const verificationToken = req.headers.authorization.split(" ")[1];
+    const  verificationToken = req.headers.authorization.split(" ")[1];
     const jwt_secret = process.env.JWT_SECRET || "test";  
+
     let decodedData;
     try {
        decodedData = jwt.verify( verificationToken, jwt_secret);
@@ -158,6 +160,8 @@ export const completeSignUp = async (req, res) => {
       return res.status(405).json({ error: "Incorrect verification number" });
     }
 
+    var bDay = new Date(birthDay);
+
     let createdUser;
     try {
         createdUser = await User.create({
@@ -167,11 +171,13 @@ export const completeSignUp = async (req, res) => {
         showOrientation,
         gender,
         showGender,
-        birthDay,
+        birthDay: bDay,
         interests,
         lookingFor,
         interestedInSeeing,
       });
+
+      
     } catch (error) {
       return res.status(404).json({ error: error });
     }
@@ -181,6 +187,9 @@ export const completeSignUp = async (req, res) => {
       jwt_secret
     );
 
+    console.log('====================================');
+      console.log("SIGNED UP");
+      console.log('====================================');
     return res
       .status(200)
       .json({ message: "User signed up", user: createdUser, token });
