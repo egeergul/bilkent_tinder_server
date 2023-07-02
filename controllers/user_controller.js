@@ -1,4 +1,12 @@
-// TODO
+import User from "../models/user_model.js"
 
-// GET : /user/  body'den sana userId salarım bana user dön
+export const getUser = async (req, res) => {
+    const {userId} = req.body;
 
+    try  {
+        var user = await User.findById(userId);
+        return res.status(200).json(user)
+    } catch (err) {
+        res.status(500).json({message: `Item from user id ${userId} not found.`});
+    }
+}
